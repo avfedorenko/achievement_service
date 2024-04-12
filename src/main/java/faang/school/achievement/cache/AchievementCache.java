@@ -28,4 +28,8 @@ public class AchievementCache {
     public Optional<Achievement> getAchievement(String title) {
         return Optional.ofNullable(achievementsByName.get(title));
     }
+
+    public HashMap<String, Achievement> getAchievementsByName() {
+        return (HashMap<String, Achievement>) achievementsByName;
+    }
 }
