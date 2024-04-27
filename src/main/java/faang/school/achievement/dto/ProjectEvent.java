@@ -9,8 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectEvent {
+public class ProjectEvent implements Event{
     Long authorId;
     Long projectId;
+
+    @Override
+    public long getAchievementHolderId() {
+        return authorId;
+    }
 }
 

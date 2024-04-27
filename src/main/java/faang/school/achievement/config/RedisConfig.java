@@ -32,7 +32,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public ChannelTopic topic(){
+    public ChannelTopic projectTopic(){
         return new ChannelTopic(projectTopic);
     }
 
@@ -40,7 +40,7 @@ public class RedisConfig {
     public RedisMessageListenerContainer container(MessageListenerAdapter projectListener){
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
-        container.addMessageListener(projectListener, topic());
+        container.addMessageListener(projectListener, projectTopic());
         return container;
     }
 
