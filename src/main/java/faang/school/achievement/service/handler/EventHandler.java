@@ -1,9 +1,9 @@
 package faang.school.achievement.service.handler;
 
-public interface EventHandler<T>{
+import faang.school.achievement.service.Event.Event;
 
-    void handle(T event);
-
-    boolean supportsEvent(Class <?> eventType );
+public interface EventHandler<T extends Event> {
+    boolean canHandle(T event);
+    void handleEvent(T event);
 
 }

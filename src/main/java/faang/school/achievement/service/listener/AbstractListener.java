@@ -1,27 +1,30 @@
 package faang.school.achievement.service.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.service.AchievementService;
+import faang.school.achievement.service.Event.Event;
+import faang.school.achievement.service.handler.EventHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @Slf4j
-public abstract class AbstractListener<T> implements MessageListener{
+public abstract class AbstractListener<T extends Event> implements MessageListener{
 
     protected final ObjectMapper objectMapper;
-    private final AchievementService achievementService;
+    private final List<EventHandler<T>> eventHandlers;
 
 
-    public AbstractListener(ObjectMapper objectMapper, AchievementService achievementService) {
+
+    public AbstractListener(ObjectMapper objectMapper, List<EventHandler<T>> eventHandlers) {
         this.objectMapper = objectMapper;
-        this.achievementService=achievementService;
-    }
+        this.eventHandlers = eventHandlers;
 
+    }
     @Override
     public void onMessage(Message message, byte[] pattern) {
         T event;
@@ -32,6 +35,11 @@ public abstract class AbstractListener<T> implements MessageListener{
             throw new RuntimeException(e);
         }
 
+        List<EventHandler<T>> filteredHandlers = eventHandlers.stream()
+                .filter(handler->handler
+                        .canHandle(event)).toList();
+
+        filteredHandlers.forEach(handler->handler.handleEvent(event));
         log.info("Data successfully passed to analyticsEventService");
     }
 
