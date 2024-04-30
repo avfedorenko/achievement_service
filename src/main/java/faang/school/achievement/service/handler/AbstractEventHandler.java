@@ -9,6 +9,7 @@ import faang.school.achievement.service.AchievementService;
 import faang.school.achievement.service.Event.Event;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 public abstract class AbstractEventHandler<T extends Event> implements EventHandler<T>{
@@ -35,6 +36,7 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
     protected abstract String getSupportedEventType(); // Get the supported event type
 
     @Override
+    @Async
     public void handleEvent(T event){
         Achievement achievement = null;
 

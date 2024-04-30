@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @Slf4j
@@ -57,7 +58,7 @@ public class AchievementService{
     }
 
     public void incrementAchievementProgress(AchievementProgress achievementProgress){
-        long currentPoints = achievementProgress.getCurrentPoints();
-        currentPoints ++;
-    }
+        AtomicLong currentPoints = new AtomicLong(achievementProgress.getCurrentPoints());
+        currentPoints.incrementAndGet();
+        achievementProgress.setCurrentPoints(currentPoints.get());
 }
