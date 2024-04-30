@@ -23,6 +23,7 @@ public class AchievementService{
     private final UserAchievementRepository userAchievementRepository;
     private final AchievementProgressRepository progressRepository;
     private final AchievementCache achievementCache;
+
     public boolean hasAchievement(long userId, long achievementId){
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
@@ -33,32 +34,36 @@ public class AchievementService{
     }
 
     public Optional<AchievementProgress> getProgress(long userId, long achievementId){
-        return progressRepository.findByUserIdAndAchievementId(userId, achievementId );
+        return progressRepository.findByUserIdAndAchievementId(userId, achievementId);
     }
 
     @Transactional
     public void giveAchievement(UserAchievement userAchievement){
 
-        userAchievementRepository.save(userAchievement);
+        if(!userAchievementRepository.existsByUserIdAndAchievementId(userAchievement.getUserId(),
+                userAchievement.getAchievement().getId())){
+            userAchievementRepository.save(userAchievement);
+        }
 
     }
 
     public Achievement getAchievementByName(String name){
-        Optional<Achievement> achievement = achievementCache.getAchievement(name);
-        if( achievement.isPresent()){
+        Optional<Achievement> achievement=achievementCache.getAchievement(name);
+        if(achievement.isPresent()){
             return achievement.get();
         }else{
-            throw new EntityNotFoundException("No achievement with name " + name);
+            throw new EntityNotFoundException("No achievement with name "+name);
         }
     }
 
     @Transactional
-    public void updateAchievementProgress(AchievementProgress achievementProgress) {
-         progressRepository.save(achievementProgress);
+    public void updateAchievementProgress(AchievementProgress achievementProgress){
+        progressRepository.save(achievementProgress);
     }
 
     public void incrementAchievementProgress(AchievementProgress achievementProgress){
-        AtomicLong currentPoints = new AtomicLong(achievementProgress.getCurrentPoints());
+        AtomicLong currentPoints=new AtomicLong(achievementProgress.getCurrentPoints());
         currentPoints.incrementAndGet();
         achievementProgress.setCurrentPoints(currentPoints.get());
+    }
 }
