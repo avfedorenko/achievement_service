@@ -1,7 +1,7 @@
 package faang.school.achievement.service.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.service.Event.Event;
+import faang.school.achievement.dto.event.Event;
 import faang.school.achievement.service.handler.EventHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;

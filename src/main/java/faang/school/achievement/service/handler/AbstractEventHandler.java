@@ -6,7 +6,7 @@ import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import faang.school.achievement.service.AchievementService;
-import faang.school.achievement.service.Event.Event;
+import faang.school.achievement.dto.event.Event;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

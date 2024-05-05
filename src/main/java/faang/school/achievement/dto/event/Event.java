@@ -1,4 +1,4 @@
-package faang.school.achievement.service.Event;
+package faang.school.achievement.dto.event;
 
 public interface Event {
 

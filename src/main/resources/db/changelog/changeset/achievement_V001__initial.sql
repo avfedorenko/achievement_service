@@ -33,4 +33,4 @@ CREATE TABLE user_achievement_progress (
 );
 
 CREATE UNIQUE INDEX user_achievement_progress_idx ON user_achievement_progress (user_id, achievement_id);
-CREATE UNIQUE INDEX user_achievement_idx ON user_achievement (user_id, achievement_id);
+--CREATE UNIQUE INDEX user_achievement_idx ON user_achievement (user_id, achievement_id);

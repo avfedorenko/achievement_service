@@ -1,6 +1,6 @@
 package faang.school.achievement.dto;
 
-import faang.school.achievement.service.Event.Event;
+import faang.school.achievement.dto.event.Event;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
