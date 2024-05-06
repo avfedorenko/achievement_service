@@ -18,9 +18,6 @@ public abstract class AbstractListener<T extends Event> implements MessageListen
 
     protected final ObjectMapper objectMapper;
     private final List<EventHandler<T>> eventHandlers;
-
-
-
     public AbstractListener(ObjectMapper objectMapper, List<EventHandler<T>> eventHandlers) {
         this.objectMapper = objectMapper;
         this.eventHandlers = eventHandlers;
@@ -41,7 +38,6 @@ public abstract class AbstractListener<T extends Event> implements MessageListen
                         .canHandle(event)).toList();
         log.info(filteredHandlers.toString());
         filteredHandlers.forEach(handler->handler.handleEvent(event));
-        log.info(event.toString());
         log.info("Data successfully passed to AchievementService!");
     }
 

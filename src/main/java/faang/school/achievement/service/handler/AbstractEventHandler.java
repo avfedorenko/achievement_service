@@ -34,7 +34,6 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
         return isSupportedEventType(event);
     }
 
-    // Abstract method for subclasses to implement
     protected abstract boolean isSupportedEventType(T event);
 
     @Override

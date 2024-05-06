@@ -18,10 +18,6 @@ public class MentorshipStartEvent implements Event{
     @NotNull
     private long menteeId;
 
-    @Override
-    public String getEventType(){
-        return "MentorshipStartEvent";
-    }
 
     @Override
     public long getUserId(){

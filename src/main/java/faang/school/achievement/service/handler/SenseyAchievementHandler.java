@@ -9,7 +9,9 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SenseyAchievementHandler extends AbstractEventHandler<MentorshipStartEvent>{
 
     @Value("${achievements.sensey}")
