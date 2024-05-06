@@ -5,10 +5,6 @@ import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import faang.school.achievement.service.AchievementService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,9 +30,4 @@ public class SenseyAchievementHandler extends AbstractEventHandler<MentorshipSta
         return true;
     }
 
-    @Async
-    @Retryable(value = {OptimisticLockingFailureException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public void handleEventAsync(MentorshipStartEvent event) {
-        handleEvent(event);
-    }
 }

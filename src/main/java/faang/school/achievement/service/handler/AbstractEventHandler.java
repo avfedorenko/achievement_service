@@ -9,6 +9,9 @@ import faang.school.achievement.service.AchievementService;
 import faang.school.achievement.dto.event.Event;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
@@ -38,6 +41,7 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
 
     @Override
     @Async
+    @Retryable(value = {OptimisticLockingFailureException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void handleEvent(T event){
         Achievement achievement = null;
 
