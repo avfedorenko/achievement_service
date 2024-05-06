@@ -3,6 +3,7 @@ package faang.school.achievement.service.listener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.dto.event.Event;
 import faang.school.achievement.service.handler.EventHandler;
+import faang.school.achievement.service.handler.SenseyAchievementHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -38,9 +39,10 @@ public abstract class AbstractListener<T extends Event> implements MessageListen
         List<EventHandler<T>> filteredHandlers = eventHandlers.stream()
                 .filter(handler->handler
                         .canHandle(event)).toList();
-
+        log.info(filteredHandlers.toString());
         filteredHandlers.forEach(handler->handler.handleEvent(event));
-        log.info("Data successfully passed to analyticsEventService");
+        log.info(event.toString());
+        log.info("Data successfully passed to AchievementService!");
     }
 
     protected abstract T listenEvent(Message message) throws IOException;

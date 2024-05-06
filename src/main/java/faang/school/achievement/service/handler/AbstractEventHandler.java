@@ -29,11 +29,13 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
     }
 
     @Override
-    public boolean canHandle(T event){
-        return event.getEventType().equals(getSupportedEventType()); // Check event type
+    public boolean canHandle(T event) {
+        // Delegate the decision to subclasses
+        return isSupportedEventType(event);
     }
 
-    protected abstract String getSupportedEventType(); // Get the supported event type
+    // Abstract method for subclasses to implement
+    protected abstract boolean isSupportedEventType(T event);
 
     @Override
     @Async

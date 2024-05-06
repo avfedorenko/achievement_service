@@ -22,13 +22,14 @@ public class SenseyAchievementHandler extends AbstractEventHandler<MentorshipSta
     }
 
     @Override
-    protected String getSupportedEventType(){
-        return "MentorshipStartEvent";
-    }
-
-    @Override
     protected String getAchievementName(){
         return achievementName;
+    }
+
+
+    @Override
+    protected boolean isSupportedEventType(MentorshipStartEvent event) {
+        return true;
     }
 
     @Async

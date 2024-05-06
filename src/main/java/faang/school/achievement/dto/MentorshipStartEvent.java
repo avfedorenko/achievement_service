@@ -4,17 +4,19 @@ import faang.school.achievement.dto.event.Event;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class MentorshipStartEvent implements Event{
 
     @NotNull
-    private long mentor_id;
+    private long mentorId;
     @NotNull
-    private long mentee_id;
+    private long menteeId;
 
     @Override
     public String getEventType(){
@@ -23,6 +25,6 @@ public class MentorshipStartEvent implements Event{
 
     @Override
     public long getUserId(){
-        return mentee_id;
+        return menteeId;
     }
 }
