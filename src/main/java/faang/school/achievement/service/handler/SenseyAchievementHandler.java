@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SenseyAchievementHandler extends AbstractEventHandler<MentorshipStartEvent>{
 
-    @Value("${achievements.sensey}")
+    @Value("${achievements.title.sensey}")
     private String achievementName;
 
     public SenseyAchievementHandler(AchievementService achievementService,

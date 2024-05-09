@@ -1,14 +1,16 @@
-package faang.school.achievement.config.context.redis;
+package faang.school.achievement.config;
 
-import faang.school.achievement.service.listener.MentorshipEventListener;
+import faang.school.achievement.listeners.LikeEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
@@ -18,29 +20,39 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int port;
 
-    @Value("${spring.data.redis.channels.name.mentorship_channel}")
-    private String mentorshipEventTopic;
+    @Value("${spring.data.redis.channels.notification_like_channel.name}")
+    private String notificationLikeTopic;
 
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
         return new JedisConnectionFactory(config);
     }
+
     @Bean
-    MessageListenerAdapter mentorshipListener(MentorshipEventListener mentorshipEventListener) {
-        return new MessageListenerAdapter(mentorshipEventListener);
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
+        template.setConnectionFactory(redisConnectionFactory());
+        return template;
     }
 
     @Bean
-    ChannelTopic mentorshipEventTopic() {
-        return new ChannelTopic(mentorshipEventTopic);
+    public MessageListenerAdapter likeEventAdapter(LikeEventListener likeEventListener) {
+        return new MessageListenerAdapter(likeEventListener);
     }
+
     @Bean
-    RedisMessageListenerContainer redisContainer(MessageListenerAdapter mentorshipEventListener) {
+    public ChannelTopic likeEventTopic() {
+        return new ChannelTopic(notificationLikeTopic);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisContainer(MessageListenerAdapter likeEventAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
-        container.addMessageListener(mentorshipEventListener, mentorshipEventTopic());
+        container.addMessageListener(likeEventAdapter, likeEventTopic());
         return container;
     }
-
 }

@@ -22,9 +22,10 @@ spring:
       port: 6379
       host: localhost
       channels:
-        achievement: achievement_channel
-        follower: follower_channel
-        mentorship_channel: mentorship_channel
+        notification_like_channel:
+          name: notification_like_channel
+        mentorship_channel:
+          name: mentorship_channel
 
 server:
   port: 8085
@@ -38,4 +39,6 @@ project-service:
   port: 8082
 
 achievements:
-  sensey: SENSEI
+  title:
+    love_everyone: love_everyone
+    sensey: SENSEI
