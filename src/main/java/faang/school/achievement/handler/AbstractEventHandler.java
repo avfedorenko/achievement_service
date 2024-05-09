@@ -24,7 +24,6 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
     protected final UserAchievementRepository userAchievementRepository;
     protected final AchievementProgressRepository achievementProgressRepository;
 
-    protected abstract boolean isSupportedEventType(T event);
     protected abstract String getAchievementName();
 
     protected void giveAchievementIfEnoughScore(AchievementProgress progress, Achievement achievement) {
@@ -35,11 +34,6 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
                     .build();
             achievementService.giveAchievement(userAchievement);
         }
-    }
-
-    @Override
-    public boolean canHandle(T event) {
-        return isSupportedEventType(event);
     }
 
     @Override
@@ -54,7 +48,7 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
             log.warn(exception.getMessage());
         }
 
-        long userId = event.getUserId();
+        long userId = event.getAchievementHolderId();
         long achievementId = achievement.getId();
 
         if (achievementService.hasAchievement(userId, achievementId)) {
@@ -62,8 +56,7 @@ public abstract class AbstractEventHandler<T extends Event> implements EventHand
             return;
         }
 
-        achievementService.createProgressIfNecessary(userId, achievementId);
-        AchievementProgress progress = achievementService.getProgress(userId, achievementId).get();
+        AchievementProgress progress = achievementService.getProgress(userId, achievement);
         achievementService.incrementAchievementProgress(progress);
         achievementService.updateAchievementProgress(progress);
         giveAchievementIfEnoughScore(progress, achievement);

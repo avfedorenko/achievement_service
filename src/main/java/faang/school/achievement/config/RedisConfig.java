@@ -1,6 +1,8 @@
 package faang.school.achievement.config;
 
-import faang.school.achievement.listeners.LikeEventListener;
+import faang.school.achievement.listener.LikeEventListener;
+import faang.school.achievement.listener.ProjectEventListener;
+import faang.school.achievement.listener.MentorshipEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,10 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channels.notification_like_channel.name}")
     private String notificationLikeTopic;
+    @Value("${spring.data.redis.channels.project_channel.name}")
+    private String projectTopic;
+    @Value("${spring.data.redis.channels.mentorship_channel.name}")
+    private String mentorshipEventTopic;
 
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {
@@ -44,15 +50,40 @@ public class RedisConfig {
     }
 
     @Bean
-    public ChannelTopic likeEventTopic() {
-        return new ChannelTopic(notificationLikeTopic);
+    public MessageListenerAdapter projectListener(ProjectEventListener projectEventListener){
+        return new MessageListenerAdapter(projectEventListener);
     }
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(MessageListenerAdapter likeEventAdapter) {
+    MessageListenerAdapter mentorshipListener(MentorshipEventListener mentorshipEventListener) {
+        return new MessageListenerAdapter(mentorshipEventListener);
+    }
+
+
+    @Bean
+    public ChannelTopic likeEventTopic() {
+        return new ChannelTopic(notificationLikeTopic);
+    }
+    @Bean
+    public ChannelTopic projectTopic(){
+        return new ChannelTopic(projectTopic);
+    }
+    @Bean
+    ChannelTopic mentorshipEventTopic() {
+        return new ChannelTopic(mentorshipEventTopic);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisContainer(MessageListenerAdapter likeEventAdapter,
+                                                        MessageListenerAdapter projectListener,
+                                                        MessageListenerAdapter mentorshipListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
         container.addMessageListener(likeEventAdapter, likeEventTopic());
+        container.addMessageListener(projectListener, projectTopic());
+        container.addMessageListener(mentorshipListener, mentorshipEventTopic());
         return container;
     }
+
+    //TODO: Adil's connection is missing here
 }

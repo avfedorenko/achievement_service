@@ -1,4 +1,4 @@
-package faang.school.achievement.listeners;
+package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.dto.Event;
@@ -30,11 +30,9 @@ public abstract class AbstractListener<T extends Event> implements MessageListen
             throw new RuntimeException(e);
         }
 
-        List<EventHandler<T>> filteredHandlers = eventHandlers.stream()
-                .filter(handler -> handler
-                        .canHandle(event)).toList();
-        log.info(filteredHandlers.toString());
-        filteredHandlers.forEach(handler -> handler.handleEvent(event));
+
+        log.info(eventHandlers.toString());
+        eventHandlers.forEach(handler -> handler.handleEvent(event));
         log.info("Data successfully passed to AchievementService!");
     }
 }

@@ -1,8 +1,8 @@
-package faang.school.achievement.service.listener;
+package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.dto.MentorshipStartEvent;
-import faang.school.achievement.service.handler.EventHandler;
+import faang.school.achievement.handler.EventHandler;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class MentorshipEventListener extends AbstractListener<MentorshipStartEvent>{
+public class MentorshipEventListener extends AbstractListener<MentorshipStartEvent> {
     public MentorshipEventListener(ObjectMapper objectMapper, List<EventHandler<MentorshipStartEvent>> eventHandlers){
         super(objectMapper, eventHandlers);
     }
