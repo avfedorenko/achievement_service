@@ -24,6 +24,8 @@ spring:
       channels:
         notification_like_channel:
           name: notification_like_channel
+        mentorship_channel:
+          name: mentorship_channel
 
 server:
   port: 8085
@@ -39,3 +41,4 @@ project-service:
 achievements:
   title:
     love_everyone: love_everyone
+    sensey: SENSEI
