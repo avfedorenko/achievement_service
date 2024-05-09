@@ -1,18 +1,31 @@
 package faang.school.achievement.handler;
 
-import faang.school.achievement.cache.AchievementCache;
-import faang.school.achievement.services.AchievementService;
-import lombok.extern.slf4j.Slf4j;
+import faang.school.achievement.dto.ProjectEvent;
+import faang.school.achievement.repository.AchievementProgressRepository;
+import faang.school.achievement.repository.UserAchievementRepository;
+import faang.school.achievement.service.AchievementService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
-public class BusinessAchievementHandler extends AbstractAchievementHandler {
+public class BusinessAchievementHandler extends AbstractEventHandler<ProjectEvent> {
 
-    private final static String TITLE = "BUSINESSMEN";
+    @Value("${achievements.title.businessman}")
+    private String businessman;
 
-    public BusinessAchievementHandler(AchievementCache achievementCache,
-                                      AchievementService achievementService) {
-        super(achievementService, achievementCache, TITLE);
+    public BusinessAchievementHandler(AchievementService achievementService, UserAchievementRepository userAchievementRepository, AchievementProgressRepository achievementProgressRepository) {
+        super(achievementService, userAchievementRepository, achievementProgressRepository);
+    }
+
+    @Override
+    protected boolean isSupportedEventType(ProjectEvent event) {
+        return true;
+    }
+
+    @Override
+    protected String getAchievementName() {
+        return businessman;
     }
 }
+
+

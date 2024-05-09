@@ -1,6 +1,5 @@
 package faang.school.achievement.dto;
 
-import faang.school.achievement.dto.event.Event;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +19,7 @@ public class MentorshipStartEvent implements Event{
 
 
     @Override
-    public long getUserId(){
+    public long getAchievementHolderId(){
         return menteeId;
     }
 }

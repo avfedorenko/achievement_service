@@ -27,7 +27,7 @@ public class LikeEvent implements Event{
     private LocalDateTime createdAt;
 
     @Override
-    public long getUserId() {
+    public long getAchievementHolderId() {
         return authorLikeId;
     }
 }

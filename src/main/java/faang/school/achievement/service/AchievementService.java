@@ -29,13 +29,11 @@ public class AchievementService {
     }
 
     @Transactional
-    public void createProgressIfNecessary(long userId, long achievementId) {
-        achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
+    public AchievementProgress getProgress(long userId, Achievement achievement) {
+        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievement.getId())
+                .orElseGet(() -> saveProgressWithUserIdAndAchievement(userId, achievement));
     }
 
-    public Optional<AchievementProgress> getProgress(long userId, long achievementId) {
-        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId);
-    }
 
     @Transactional
     public void giveAchievement(UserAchievement userAchievement) {
@@ -62,5 +60,13 @@ public class AchievementService {
 
     public void updateAchievementProgress(AchievementProgress achievementProgress) {
         achievementProgressRepository.save(achievementProgress);
+    }
+
+    private AchievementProgress saveProgressWithUserIdAndAchievement(long userId, Achievement achievement) {
+        return achievementProgressRepository.save(AchievementProgress.builder()
+                .userId(userId)
+                .achievement(achievement)
+                .build()
+        );
     }
 }

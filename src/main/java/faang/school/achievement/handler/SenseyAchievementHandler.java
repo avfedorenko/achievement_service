@@ -1,4 +1,4 @@
-package faang.school.achievement.service.handler;
+package faang.school.achievement.handler;
 
 import faang.school.achievement.dto.MentorshipStartEvent;
 import faang.school.achievement.repository.AchievementProgressRepository;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SenseyAchievementHandler extends AbstractEventHandler<MentorshipStartEvent>{
+public class SenseyAchievementHandler extends AbstractEventHandler<MentorshipStartEvent> {
 
     @Value("${achievements.title.sensey}")
     private String achievementName;
