@@ -20,11 +20,6 @@ public class AllLoveAchievementHandler extends AbstractEventHandler<LikeEvent> {
     }
 
     @Override
-    protected boolean isSupportedEventType(LikeEvent event) {
-        return true;
-    }
-
-    @Override
     protected String getAchievementName() {
         return achievementName;
     }

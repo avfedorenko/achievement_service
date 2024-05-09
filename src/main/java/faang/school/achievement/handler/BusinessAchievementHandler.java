@@ -18,11 +18,6 @@ public class BusinessAchievementHandler extends AbstractEventHandler<ProjectEven
     }
 
     @Override
-    protected boolean isSupportedEventType(ProjectEvent event) {
-        return true;
-    }
-
-    @Override
     protected String getAchievementName() {
         return businessman;
     }

@@ -24,10 +24,4 @@ public class SenseyAchievementHandler extends AbstractEventHandler<MentorshipSta
         return achievementName;
     }
 
-
-    @Override
-    protected boolean isSupportedEventType(MentorshipStartEvent event) {
-        return true;
-    }
-
 }
