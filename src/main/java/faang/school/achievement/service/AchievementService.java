@@ -6,56 +6,50 @@ import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
-
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.concurrent.atomic.AtomicLong;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class AchievementService {
+
     private final UserAchievementRepository userAchievementRepository;
-    private final AchievementProgressRepository progressRepository;
+    private final AchievementProgressRepository achievementProgressRepository;
     private final AchievementCache achievementCache;
+
     public boolean hasAchievement(long userId, long achievementId) {
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
     @Transactional
-    public void createProgressIfNecessary(long userId, long achievementId) {
-        progressRepository.createProgressIfNecessary(userId, achievementId);
+    public AchievementProgress getProgress(long userId, Achievement achievement) {
+        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievement.getId())
+                .orElseGet(() -> saveProgressWithUserIdAndAchievement(userId, achievement));
     }
 
-    public Optional<AchievementProgress> getProgress(long userId, long achievementId) {
-        return progressRepository.findByUserIdAndAchievementId(userId, achievementId);
-    }
 
     @Transactional
     public void giveAchievement(UserAchievement userAchievement) {
-        if(!hasAchievement(userAchievement.getUserId(),
-                userAchievement.getAchievement().getId())){
+        if (!userAchievementRepository.existsByUserIdAndAchievementId(userAchievement.getUserId(),
+                userAchievement.getAchievement().getId())) {
             userAchievementRepository.save(userAchievement);
         }
     }
 
     public Achievement getAchievementByName(String name) {
         Optional<Achievement> achievement = achievementCache.getAchievement(name);
-        if(achievement.isPresent()){
+        if (achievement.isPresent()) {
             return achievement.get();
         } else {
             throw new EntityNotFoundException("No achievement with name " + name);
         }
-    }
-
-    @Transactional
-    public void updateAchievementProgress(AchievementProgress achievementProgress) {
-        progressRepository.save(achievementProgress);
     }
 
     public void incrementAchievementProgress(AchievementProgress achievementProgress) {
@@ -64,4 +58,15 @@ public class AchievementService {
         achievementProgress.setCurrentPoints(currentPoints.get());
     }
 
+    public void updateAchievementProgress(AchievementProgress achievementProgress) {
+        achievementProgressRepository.save(achievementProgress);
+    }
+
+    private AchievementProgress saveProgressWithUserIdAndAchievement(long userId, Achievement achievement) {
+        return achievementProgressRepository.save(AchievementProgress.builder()
+                .userId(userId)
+                .achievement(achievement)
+                .build()
+        );
+    }
 }

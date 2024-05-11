@@ -21,9 +21,14 @@ spring:
     redis:
       port: 6379
       host: localhost
-      channel:
-        achievement: achievement_channel
-        follower: follower_channel
+      channels:
+        notification_like_channel:
+          name: notification_like_channel
+        mentorship_channel:
+          name: mentorship_channel
+        project_channel:
+          name: project_channel
+
 
 
 
@@ -37,3 +42,12 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+achievements:
+  title:
+    love_everyone: love_everyone
+    sensey: SENSEI
+    businessman: BUSINESSMEN
+app:
+  async:
+    executorBeanName: executor
