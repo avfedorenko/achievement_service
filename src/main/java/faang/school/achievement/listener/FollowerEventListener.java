@@ -3,7 +3,7 @@ package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.dto.FollowerEvent;
-import faang.school.achievement.service.handler.EventHandler;
+import faang.school.achievement.handler.EventHandler;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.stereotype.Component;
 

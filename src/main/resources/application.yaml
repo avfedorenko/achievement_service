@@ -48,6 +48,7 @@ achievements:
     love_everyone: love_everyone
     sensey: SENSEI
     businessman: BUSINESSMEN
+    blogger: BLOGGER
 app:
   async:
     executorBeanName: executor
