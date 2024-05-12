@@ -1,5 +1,6 @@
 package faang.school.achievement.config;
 
+import faang.school.achievement.listener.CommentEventListener;
 import faang.school.achievement.listener.LikeEventListener;
 import faang.school.achievement.listener.ProjectEventListener;
 import faang.school.achievement.listener.MentorshipEventListener;
@@ -28,6 +29,8 @@ public class RedisConfig {
     private String projectTopic;
     @Value("${spring.data.redis.channels.mentorship_channel.name}")
     private String mentorshipEventTopic;
+    @Value("${spring.data.redis.channels.comment_channel.name}")
+    private String commentTopic;
 
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {
@@ -59,6 +62,11 @@ public class RedisConfig {
         return new MessageListenerAdapter(mentorshipEventListener);
     }
 
+    @Bean
+    MessageListenerAdapter commentListener(CommentEventListener commentEventListener) {
+        return new MessageListenerAdapter(commentEventListener);
+    }
+
 
     @Bean
     public ChannelTopic likeEventTopic() {
@@ -74,14 +82,21 @@ public class RedisConfig {
     }
 
     @Bean
+    ChannelTopic commentEventTopic(){
+        return new ChannelTopic(commentTopic);
+    }
+
+    @Bean
     public RedisMessageListenerContainer redisContainer(MessageListenerAdapter likeEventAdapter,
                                                         MessageListenerAdapter projectListener,
-                                                        MessageListenerAdapter mentorshipListener) {
+                                                        MessageListenerAdapter mentorshipListener,
+                                                        MessageListenerAdapter commentListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
         container.addMessageListener(likeEventAdapter, likeEventTopic());
         container.addMessageListener(projectListener, projectTopic());
         container.addMessageListener(mentorshipListener, mentorshipEventTopic());
+        container.addMessageListener(commentListener, commentEventTopic());
         return container;
     }
 
