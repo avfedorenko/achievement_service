@@ -1,6 +1,6 @@
-package faang.school.achievement.service.handler;
+package faang.school.achievement.handler;
 
-import faang.school.achievement.events.Event;
+import faang.school.achievement.dto.Event;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -8,6 +8,8 @@ import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import faang.school.achievement.service.AchievementService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
@@ -15,66 +17,48 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
-public abstract class AbstractEventHandler<T extends Event> implements EventHandler<T>{
+@RequiredArgsConstructor
+public abstract class AbstractEventHandler<T extends Event> implements EventHandler<T> {
 
     protected final AchievementService achievementService;
     protected final UserAchievementRepository userAchievementRepository;
     protected final AchievementProgressRepository achievementProgressRepository;
 
-    public AbstractEventHandler(AchievementService achievementService,
-                                UserAchievementRepository userAchievementRepository,
-                                AchievementProgressRepository progressRepository
-    ){
-        this.achievementService=achievementService;
-        this.userAchievementRepository=userAchievementRepository;
-        this.achievementProgressRepository=progressRepository;
+    protected abstract String getAchievementName();
 
+    protected void giveAchievementIfEnoughScore(AchievementProgress progress, Achievement achievement) {
+        if (progress.getCurrentPoints() >= achievement.getPoints()) {
+            UserAchievement userAchievement = UserAchievement.builder()
+                    .userId(progress.getUserId())
+                    .achievement(achievement)
+                    .build();
+            achievementService.giveAchievement(userAchievement);
+        }
     }
-
-    @Override
-    public boolean canHandle(T event){
-        return event.getEventType().equals(getSupportedEventType()); // Check event type
-    }
-
-    protected abstract String getSupportedEventType(); // Get the supported event type
 
     @Override
     @Async
-    @Retryable(value = {OptimisticLockingFailureException.class},
-            maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public void handleEvent(T event){
-        Achievement achievement = null;
+    @Retryable(value = {OptimisticLockingFailureException.class}, maxAttempts = 4, backoff = @Backoff(delay = 1000))
+    public void handleEvent(T event) {
 
-        try{
-            achievement=achievementService.getAchievementByName(getAchievementName());
-        }catch(EntityNotFoundException ex){
-            log.warn(ex.getMessage());
+        Achievement achievement = null;
+        try {
+            achievement = achievementService.getAchievementByName(getAchievementName());
+        } catch (EntityNotFoundException exception) {
+            log.warn(exception.getMessage());
         }
 
-        long userId=event.getUserId();
+        long userId = event.getAchievementHolderId();
         long achievementId = achievement.getId();
 
-        if(achievementService.hasAchievement(userId, achievementId)){
+        if (achievementService.hasAchievement(userId, achievementId)) {
             log.info("User has already received achievement: {}", getAchievementName());
             return;
         }
 
-        achievementService.createProgressIfNecessary(userId, achievementId);
-        AchievementProgress progress = achievementService.getProgress(userId, achievementId).get();
+        AchievementProgress progress = achievementService.getProgress(userId, achievement);
         achievementService.incrementAchievementProgress(progress);
         achievementService.updateAchievementProgress(progress);
         giveAchievementIfEnoughScore(progress, achievement);
-
-    }
-
-    protected abstract String getAchievementName();
-
-    protected void giveAchievementIfEnoughScore(AchievementProgress progress, Achievement achievement){
-        if(progress.getCurrentPoints()>=achievement.getPoints()){
-            UserAchievement userAchievement=UserAchievement
-                    .builder().userId(progress.getUserId())
-                    .achievement(achievement).build();
-            achievementService.giveAchievement(userAchievement);
-        }
     }
 }

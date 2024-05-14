@@ -1,6 +1,7 @@
 package faang.school.achievement.service.handler;
 
 import faang.school.achievement.dto.FollowerEvent;
+import faang.school.achievement.handler.AbstractEventHandler;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import faang.school.achievement.service.AchievementService;
@@ -14,11 +15,6 @@ public class BloggerAchievementHandler extends AbstractEventHandler<FollowerEven
                                      UserAchievementRepository userAchievementRepository,
                                      AchievementProgressRepository achievementProgressRepository){
         super(achievementService, userAchievementRepository, achievementProgressRepository);
-    }
-
-    @Override
-    protected String getSupportedEventType() {
-        return "FollowerEvent";
     }
 
     @Override
