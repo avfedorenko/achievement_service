@@ -22,6 +22,6 @@ public class FollowerEvent implements Event {
 
     @Override
     public long getAchievementHolderId() {
-        return followerId;
+        return followeeId;
     }
 }
