@@ -53,7 +53,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter projectListener(ProjectEventListener projectEventListener){
+    public MessageListenerAdapter projectListener(ProjectEventListener projectEventListener) {
         return new MessageListenerAdapter(projectEventListener);
     }
 
@@ -72,17 +72,19 @@ public class RedisConfig {
     public ChannelTopic likeEventTopic() {
         return new ChannelTopic(notificationLikeTopic);
     }
+
     @Bean
-    public ChannelTopic projectTopic(){
+    public ChannelTopic projectTopic() {
         return new ChannelTopic(projectTopic);
     }
+
     @Bean
     ChannelTopic mentorshipEventTopic() {
         return new ChannelTopic(mentorshipEventTopic);
     }
 
     @Bean
-    ChannelTopic commentEventTopic(){
+    ChannelTopic commentEventTopic() {
         return new ChannelTopic(commentTopic);
     }
 
@@ -99,6 +101,4 @@ public class RedisConfig {
         container.addMessageListener(commentListener, commentEventTopic());
         return container;
     }
-
-    //TODO: Adil's connection is missing here
 }
