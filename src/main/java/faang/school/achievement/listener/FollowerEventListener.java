@@ -1,6 +1,7 @@
 package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import faang.school.achievement.dto.FollowerEvent;
 import faang.school.achievement.handler.EventHandler;
 import org.springframework.data.redis.connection.Message;
@@ -13,7 +14,7 @@ import java.util.List;
 public class FollowerEventListener extends AbstractListener<FollowerEvent> {
     public FollowerEventListener(ObjectMapper objectMapper,
                                  List<EventHandler<FollowerEvent>> eventHandlers){
-        super(objectMapper, eventHandlers);
+        super(objectMapper.registerModule(new JavaTimeModule()), eventHandlers);
     }
     @Override
     protected FollowerEvent listenEvent(Message message) throws IOException {
