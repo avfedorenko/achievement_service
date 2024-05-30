@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 public class CommentEvent implements Event {
+
     @NotNull
     private Long commentId;
     @NotNull

@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectEvent implements Event{
+public class ProjectEvent implements Event {
+
     Long authorId;
     Long projectId;
 

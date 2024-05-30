@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LikeEvent implements Event{
+public class LikeEvent implements Event {
+
     @NotNull
     private Long authorLikeId;
     @Positive

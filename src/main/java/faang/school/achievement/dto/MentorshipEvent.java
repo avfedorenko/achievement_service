@@ -10,16 +10,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class MentorshipStartEvent implements Event{
+public class MentorshipEvent implements Event {
 
     @NotNull
     private long mentorId;
     @NotNull
     private long menteeId;
 
-
     @Override
-    public long getAchievementHolderId(){
+    public long getAchievementHolderId() {
         return menteeId;
     }
 }
