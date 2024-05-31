@@ -6,20 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
-public class MentorshipStartEvent implements Event{
+@Builder
+@AllArgsConstructor
+public class CommentEvent implements Event {
 
     @NotNull
-    private long mentorId;
+    private Long commentId;
     @NotNull
-    private long menteeId;
-
+    private Long authorId;
+    @NotNull
+    private String content;
+    @NotNull
+    private Long postId;
 
     @Override
     public long getAchievementHolderId(){
-        return menteeId;
+        return authorId;
     }
 }

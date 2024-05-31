@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BloggerAchievementHandler extends AbstractEventHandler<FollowerEvent> {
+
     @Value("${achievements.title.blogger}")
     private String blogger;
 

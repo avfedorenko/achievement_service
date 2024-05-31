@@ -12,10 +12,12 @@ import java.util.List;
 
 @Component
 public class FollowerEventListener extends AbstractListener<FollowerEvent> {
+
     public FollowerEventListener(ObjectMapper objectMapper,
-                                 List<EventHandler<FollowerEvent>> eventHandlers){
+                                 List<EventHandler<FollowerEvent>> eventHandlers) {
         super(objectMapper.registerModule(new JavaTimeModule()), eventHandlers);
     }
+
     @Override
     protected FollowerEvent listenEvent(Message message) throws IOException {
         return objectMapper.readValue(message.getBody(), FollowerEvent.class);

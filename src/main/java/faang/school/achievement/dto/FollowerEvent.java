@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FollowerEvent implements Event {
+
     @NotNull
     private long followerId;
     @NotNull

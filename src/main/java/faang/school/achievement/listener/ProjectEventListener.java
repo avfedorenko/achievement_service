@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 @Slf4j
 public class ProjectEventListener extends AbstractListener<ProjectEvent> {
+
     public ProjectEventListener(List<EventHandler<ProjectEvent>> eventHandlers,
                                 ObjectMapper objectMapper) {
         super(objectMapper, eventHandlers);

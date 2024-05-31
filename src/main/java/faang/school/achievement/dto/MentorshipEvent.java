@@ -1,22 +1,24 @@
 package faang.school.achievement.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class ProjectEvent implements Event {
+@Data
+public class MentorshipEvent implements Event {
 
-    Long authorId;
-    Long projectId;
+    @NotNull
+    private long mentorId;
+    @NotNull
+    private long menteeId;
 
     @Override
     public long getAchievementHolderId() {
-        return authorId;
+        return menteeId;
     }
 }
-

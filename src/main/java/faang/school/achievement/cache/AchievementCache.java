@@ -15,14 +15,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AchievementCache {
     private final AchievementRepository achievementRepository;
-    private Map<String, Achievement> achievementsByName = new HashMap<>();
+    private final Map<String, Achievement> achievementsByName = new HashMap<>();
 
     @PostConstruct
     public void init() {
         List<Achievement> achievements = achievementRepository.findAll();
-        achievements.forEach(achievement -> {
-            achievementsByName.put(achievement.getTitle(), achievement);
-        });
+        achievements.forEach(achievement ->
+                achievementsByName.put(achievement.getTitle(), achievement)
+        );
     }
 
     public Optional<Achievement> getAchievement(String title) {

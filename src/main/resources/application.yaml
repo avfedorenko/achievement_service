@@ -22,17 +22,16 @@ spring:
       port: 6379
       host: localhost
       channels:
-        notification_like_channel:
-          name: notification_like_channel
+        comment_channel:
+          name: comment_channel
+        follower_channel:
+          name: follower_channel
+        like_channel:
+          name: like_channel
         mentorship_channel:
           name: mentorship_channel
         project_channel:
           name: project_channel
-        follower_channel:
-          name: follower_channel
-
-
-
 
 server:
   port: 8085
@@ -41,16 +40,10 @@ logging:
   level:
     root: info
 
-project-service:
-  host: localhost
-  port: 8082
-
 achievements:
   title:
     love_everyone: love_everyone
-    sensey: SENSEI
+    sensei: SENSEI
     businessman: BUSINESSMEN
+    expert: EXPERT
     blogger: BLOGGER
-app:
-  async:
-    executorBeanName: executor
